@@ -1,2 +1,2 @@
-# product-predictor project
+# product-predictor Project
 
