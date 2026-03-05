@@ -8,10 +8,10 @@
 import SwiftUI
 
 @main
-struct pricepredictorApp: App {
+struct PricePredictorApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ComicSearchView()
         }
     }
 }

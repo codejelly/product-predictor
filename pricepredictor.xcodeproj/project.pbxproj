@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		B01BEEB82F4FB26F00935E85 /* Secrets.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = B01BEEB62F4FB26F00935E85 /* Secrets.xcconfig */; };
+		B01BEECF2F50EF2D00935E85 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B01BEECE2F50EF1600935E85 /* String+Extension.swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		B0A8FB492F450DE1000A3482 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -24,19 +29,44 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		B01BEEB62F4FB26F00935E85 /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
+		B01BEECE2F50EF1600935E85 /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
 		B0A8FB3B2F450DE0000A3482 /* pricepredictor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = pricepredictor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0A8FB482F450DE1000A3482 /* pricepredictorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = pricepredictorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0A8FB522F450DE1000A3482 /* pricepredictorUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = pricepredictorUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		B01BEEC92F4FB3E200935E85 /* Exceptions for "pricepredictor" folder in "pricepredictor" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = B0A8FB3A2F450DE0000A3482 /* pricepredictor */;
+		};
+		B08261BB2F4E66DF0064F894 /* Exceptions for "pricepredictorTests" folder in "pricepredictorTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = B0A8FB472F450DE1000A3482 /* pricepredictorTests */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		B0A8FB3D2F450DE0000A3482 /* pricepredictor */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				B01BEEC92F4FB3E200935E85 /* Exceptions for "pricepredictor" folder in "pricepredictor" target */,
+			);
 			path = pricepredictor;
 			sourceTree = "<group>";
 		};
 		B0A8FB4B2F450DE1000A3482 /* pricepredictorTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				B08261BB2F4E66DF0064F894 /* Exceptions for "pricepredictorTests" folder in "pricepredictorTests" target */,
+			);
 			path = pricepredictorTests;
 			sourceTree = "<group>";
 		};
@@ -72,9 +102,35 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B01BEECA2F50E6A300935E85 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				B01BEECD2F50E79500935E85 /* Configurations */,
+				B01BEECC2F50E70A00935E85 /* Extensions */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		B01BEECC2F50E70A00935E85 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				B01BEECE2F50EF1600935E85 /* String+Extension.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		B01BEECD2F50E79500935E85 /* Configurations */ = {
+			isa = PBXGroup;
+			children = (
+				B01BEEB62F4FB26F00935E85 /* Secrets.xcconfig */,
+			);
+			path = Configurations;
+			sourceTree = "<group>";
+		};
 		B0A8FB322F450DE0000A3482 = {
 			isa = PBXGroup;
 			children = (
+				B01BEECA2F50E6A300935E85 /* Utilities */,
 				B0A8FB3D2F450DE0000A3482 /* pricepredictor */,
 				B0A8FB4B2F450DE1000A3482 /* pricepredictorTests */,
 				B0A8FB552F450DE1000A3482 /* pricepredictorUITests */,
@@ -212,6 +268,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B01BEEB82F4FB26F00935E85 /* Secrets.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -236,6 +293,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B01BEECF2F50EF2D00935E85 /* String+Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -271,6 +329,7 @@
 /* Begin XCBuildConfiguration section */
 		B0A8FB5A2F450DE1000A3482 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B01BEEB62F4FB26F00935E85 /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -334,6 +393,7 @@
 		};
 		B0A8FB5B2F450DE1000A3482 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B01BEEB62F4FB26F00935E85 /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -397,6 +457,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = pricepredictor/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -428,6 +489,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = pricepredictor/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -457,6 +519,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = pricepredictorTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.codejelly.pricepredictorTests;
@@ -478,6 +541,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = pricepredictorTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.codejelly.pricepredictorTests;
@@ -540,7 +604,7 @@
 				B0A8FB5B2F450DE1000A3482 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		B0A8FB5C2F450DE1000A3482 /* Build configuration list for PBXNativeTarget "pricepredictor" */ = {
 			isa = XCConfigurationList;
@@ -549,7 +613,7 @@
 				B0A8FB5E2F450DE1000A3482 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		B0A8FB5F2F450DE1000A3482 /* Build configuration list for PBXNativeTarget "pricepredictorTests" */ = {
 			isa = XCConfigurationList;
@@ -558,7 +622,7 @@
 				B0A8FB612F450DE1000A3482 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		B0A8FB622F450DE1000A3482 /* Build configuration list for PBXNativeTarget "pricepredictorUITests" */ = {
 			isa = XCConfigurationList;
@@ -567,7 +631,7 @@
 				B0A8FB642F450DE1000A3482 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};
