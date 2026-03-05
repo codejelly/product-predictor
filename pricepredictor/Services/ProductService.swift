@@ -111,7 +111,7 @@ class ProductService {
         // 5. Identify the specific error by status code
         switch httpResponse.statusCode {
         case 200...299:
-            // Everything is fine! Now it's safe to decode.
+            // Now it's safe to decode.
             // Take this text and turn it into a List of Product structs
             // Swift automatically maps the keys from the API to your variables
             // If you only use JSONDecoder().decode(...), your app will often "crash" into the catch block with a generic "Data Corrupted" or "Key Not Found" error. This happens because the API is sending you an error message (like "Rate Limit Reached"), but your code is trying to force that message into your Product model.
