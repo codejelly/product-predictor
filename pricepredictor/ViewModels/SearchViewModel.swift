@@ -14,30 +14,31 @@ import Foundation
 class SearchViewModel {
     var errorMessage: String?
     var showAlert: Bool = false // the alert "Trigger"
-    var products: [Product] = []
+    var products: [Volumes] = []
     var isLoading = false
     var searchText = ""
     var lastSubmittedSearch = "" // 👈 ADD THIS: Our "Memory" variable
-    
+
     private let service = ProductService()
-    
+
     func loadData(for query: String) async {
         // Start spinner begins
         isLoading = true
-        
+
         // This code is GUARANTEED to run when the function finishes
         defer { isLoading = false }
         errorMessage = nil
-        
+
         self.lastSubmittedSearch = query
-        
+
+        // 3. fetchIssues: The "Package Delivery" (Combines the Map and the Driving to return your data).
         do {
-            let data = try await service.fetchProducts(query: query)
+            let data = try await service.fetchVolumes(for : query)
             // This line only runs if NO error was thrown above
             self.products = data
-            
+
             let cleansedSearch = query.sanitized
-            
+
             // 1. Break the sanitized query into individual words (tokens)
             let searchTokens = cleansedSearch.components(separatedBy: " ")
                 .filter { !$0.isEmpty }
@@ -47,16 +48,16 @@ class SearchViewModel {
                     self.products = []
                     return
                 }
-            
+
             let refined = data.filter { product in
                 let productName = product.name.sanitized
-                
+
                 // 2. The "Strict AND" Check: Does the product name contain EVERY word in the search tokens?
                 return searchTokens.allSatisfy { token in
                         productName.contains(token)
                     }
             }
-            
+
             // Only update the UI once with the final, filtered list
             self.products = refined
             // with do catch an error is already expected by default
