@@ -15,7 +15,7 @@ struct ComicSearchView: View {
     // In a simple search app, you don't strictly need to manage the task manually because .onSubmit creates a fresh one. However, if you were doing search-as-you-type,
     // Manage the task manually here ,if want to change the search implementation in future
     // @State private var task: Task<(), Never>?
-    
+
     var body: some View {
         // LAYER 1: The Navigator (Handles titles, search bars, and moving between screens)
         NavigationStack {
@@ -32,8 +32,7 @@ struct ComicSearchView: View {
                             .foregroundColor(.secondary)
                             .padding(.horizontal)
                     }
-                    
-                    
+
                     if viewModel.products.isEmpty {
                         EmptyView()
                     } else {
