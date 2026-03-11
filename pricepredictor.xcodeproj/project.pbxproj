@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B01BEEB82F4FB26F00935E85 /* Secrets.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = B01BEEB62F4FB26F00935E85 /* Secrets.xcconfig */; };
 		B01BEECF2F50EF2D00935E85 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B01BEECE2F50EF1600935E85 /* String+Extension.swift */; };
+		B06774C72F61D714006A33B5 /* Secrets.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = B06774C62F61D714006A33B5 /* Secrets.xcconfig */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,8 +29,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		B01BEEB62F4FB26F00935E85 /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 		B01BEECE2F50EF1600935E85 /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
+		B06774C62F61D714006A33B5 /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 		B0A8FB3B2F450DE0000A3482 /* pricepredictor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = pricepredictor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0A8FB482F450DE1000A3482 /* pricepredictorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = pricepredictorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0A8FB522F450DE1000A3482 /* pricepredictorUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = pricepredictorUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -105,7 +105,6 @@
 		B01BEECA2F50E6A300935E85 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				B01BEECD2F50E79500935E85 /* Configurations */,
 				B01BEECC2F50E70A00935E85 /* Extensions */,
 			);
 			path = Utilities;
@@ -119,12 +118,20 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
-		B01BEECD2F50E79500935E85 /* Configurations */ = {
+		B06774B52F61D031006A33B5 /* Configurations */ = {
 			isa = PBXGroup;
 			children = (
-				B01BEEB62F4FB26F00935E85 /* Secrets.xcconfig */,
+				B06774BF2F61D342006A33B5 /* Secrets */,
 			);
 			path = Configurations;
+			sourceTree = "<group>";
+		};
+		B06774BF2F61D342006A33B5 /* Secrets */ = {
+			isa = PBXGroup;
+			children = (
+				B06774C62F61D714006A33B5 /* Secrets.xcconfig */,
+			);
+			path = Secrets;
 			sourceTree = "<group>";
 		};
 		B0A8FB322F450DE0000A3482 = {
@@ -135,6 +142,7 @@
 				B0A8FB4B2F450DE1000A3482 /* pricepredictorTests */,
 				B0A8FB552F450DE1000A3482 /* pricepredictorUITests */,
 				B0A8FB3C2F450DE0000A3482 /* Products */,
+				B06774B52F61D031006A33B5 /* Configurations */,
 			);
 			sourceTree = "<group>";
 		};
@@ -268,7 +276,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B01BEEB82F4FB26F00935E85 /* Secrets.xcconfig in Resources */,
+				B06774C72F61D714006A33B5 /* Secrets.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -329,7 +337,7 @@
 /* Begin XCBuildConfiguration section */
 		B0A8FB5A2F450DE1000A3482 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B01BEEB62F4FB26F00935E85 /* Secrets.xcconfig */;
+			baseConfigurationReference = B06774C62F61D714006A33B5 /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -393,7 +401,7 @@
 		};
 		B0A8FB5B2F450DE1000A3482 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B01BEEB62F4FB26F00935E85 /* Secrets.xcconfig */;
+			baseConfigurationReference = B06774C62F61D714006A33B5 /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
