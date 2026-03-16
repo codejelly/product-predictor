@@ -29,23 +29,21 @@ struct ComicResponse<T: Codable>: Codable {
 }
 
 // these structs break down the initial call
-struct Volumes: Codable, Identifiable {
+struct Volumes: Codable, Identifiable, Hashable {
     // 1. Give 'id' a unique name for Swift logic, map it to "id" from API
     let id: Int
-    let name: String
+    let name: String?
     let image: ImageLinks?
     // Determine volume size, use for pagination logic
-    let countOfIssues: Int?
 
     enum CodingKeys: String, CodingKey {
         case id
         case name
         case image
-        case countOfIssues = "count_of_issues"
     }
 }
 
-struct VolumeIssues: Codable, Identifiable {
+struct VolumeIssues: Codable, Identifiable, Hashable {
     // 1. Give 'id' a unique name for Swift logic, map it to "id" from API
     let id: Int
     let issueNumber: String
@@ -73,7 +71,7 @@ struct VolumeIssues: Codable, Identifiable {
     }
 }
 
-struct ImageLinks: Codable {
+struct ImageLinks: Codable, Hashable {
     let smallURL: String
     let screenURL: String
 
