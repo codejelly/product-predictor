@@ -19,13 +19,10 @@ struct ComicSearchView: View {
     var body: some View {
         // LAYER 1: The Navigator (Handles titles, search bars, and moving between screens)
         NavigationStack {
-            // LAYER 2: The Content Depth (Handles overlapping elements like Spinners over Lists)
             ZStack {
-                // LAYER 3: The Content Arrangement (Arranges items Top-to-Bottom)
-                // Main content area,A ZStack is like a sandwich (layers of ham and cheese inside the frame)
-                VStack {
-                    // Only show the subtitle if we actually have a successful search stored
-                    if !viewModel.lastSubmittedSearch.isEmpty && !viewModel.products.isEmpty{
+                VStack(alignment: .leading) {
+                    // Header Logic
+                    if !viewModel.lastSubmittedSearch.isEmpty && !viewModel.products.isEmpty {
                         Text("Results for \"\(viewModel.lastSubmittedSearch)\"")
                             .font(.subheadline)
                             .bold()
@@ -34,14 +31,22 @@ struct ComicSearchView: View {
                     }
 
                     if viewModel.products.isEmpty {
-                        EmptyView()
+                        // You can replace this with a custom "No Results" graphic later
+                        ContentUnavailableView("No Comics Found", systemImage: "book.closed")
                     } else {
+                        // ✅ Calling the ProductRow inside the List
                         List(viewModel.products) { product in
-                            ProductRow(product: product)
+                            NavigationLink(value: product) {
+                                ProductRow(item: product)
+                            }
+                        }
+                        // ✅ Modern NavigationStack destination logic
+                        .navigationDestination(for: Volumes.self) { volume in
+                            VolumeDetailView(volume: volume)
                         }
                     }
                 }
-            }
+            
             // In SwiftUI, the visual order of modifiers like .alert, .onSubmit, and .onChange doesn't strictly follow the "order of operations." Since they are all "listeners" waiting for different events, they can sit in any order.
             .navigationTitle("Collectibles")
             // binding
@@ -60,6 +65,10 @@ struct ComicSearchView: View {
                 if !cleanQuery.isEmpty {
                     Task {
                         await viewModel.loadData(for: searchText)
+                        if let timestamp = viewModel.lastFetched {
+                            timestamp
+                                .formatted(date: .omitted, time: .shortened)
+                        }
                         // 🪄 Clear the bar so it's ready for the next search
                         viewModel.searchText = ""
                     }
