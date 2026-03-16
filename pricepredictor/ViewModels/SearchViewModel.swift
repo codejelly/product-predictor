@@ -5,8 +5,6 @@
 //  Created by matthew chadwell on 2/20/26.
 //
 
-// data sent here
-
 import Foundation
 
 @Observable
@@ -16,6 +14,8 @@ class SearchViewModel {
     var showAlert: Bool = false // the alert "Trigger"
     var products: [Volumes] = []
     var isLoading = false
+    var lastFetched: Date? // 👈 The "Freshness" Timestamp
+    // Search data
     var searchText = ""
     var lastSubmittedSearch = "" // 👈 ADD THIS: Our "Memory" variable
 
@@ -42,15 +42,16 @@ class SearchViewModel {
             // 1. Break the sanitized query into individual words (tokens)
             let searchTokens = cleansedSearch.components(separatedBy: " ")
                 .filter { !$0.isEmpty }
-            
+
             // 2. Logic: If the user submitted a query that resulted in zero valid tokens
                 if searchTokens.isEmpty {
                     self.products = []
                     return
                 }
 
+            // 1. Safely unwrap the name. If it's nil, we use an empty string.
             let refined = data.filter { product in
-                let productName = product.name.sanitized
+                let productName = (product.name ?? "").sanitized
 
                 // 2. The "Strict AND" Check: Does the product name contain EVERY word in the search tokens?
                 return searchTokens.allSatisfy { token in
@@ -62,6 +63,7 @@ class SearchViewModel {
             self.products = refined
             // with do catch an error is already expected by default
             // let filtering for specific errors rather than just treating everything as a generic failure.
+            self.lastFetched = Date()
         } catch let error as ResponseError {
             // 2. This catches the specific error you defined in the Service
             self.products = []
