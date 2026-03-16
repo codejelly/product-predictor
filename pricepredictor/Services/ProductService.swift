@@ -66,6 +66,7 @@ class ProductService {
                 let decoder = JSONDecoder()
                 // If you have specific date formats, you'd set them here:
                 // decoder.dateDecodingStrategy = .iso8601
+                print("Resposne data: \(data)")
                 return try decoder.decode(T.self, from: data)
             } catch {
                 print("❌ Decoding Error: \(error)")
@@ -154,15 +155,16 @@ extension ProductService {
     }
     // Start Loading → Get Data → Stop Loading.
     // task The Task block allows the button to finish its animation immediately while the network request runs in the background.
-    func fetchVolumeIssues(for volumeID: Int) async throws -> [VolumeIssues] {
+    func fetchVolumeIssues(for volumeID: Int) async throws -> (issues: [VolumeIssues], totalCount: Int) {
         // 1. Make sure this points to the ISSUES endpoint for a specific Volume ID
         guard let URL = APIConfig.searchVolumeIssuesURL(for: volumeID)
         else { throw ResponseError.invalidUrl }
-        
+
         // 2. Decode specifically as VolumeIssues
         let data = try await performRequest(for: URL) as ComicResponse<VolumeIssues>
         print("Results: \(data)")
-        
-        return data.results
+
+        // need to return results for the body and the header (total resulsts count)
+        return (data.results, data.numberOfTotalResults)
     }
 }
