@@ -9,19 +9,35 @@ import SwiftUI
 
 protocol ComicDisplayable {
     var id: Int { get }
-    var name: String? { get } // Keep this optional to satisfy both structs
+    var name: String? { get }
     var image: ImageLinks? { get }
     var subtitle: String { get }
+    var resourceType: String? { get }
+    var startYear: String? { get }
+    var countOfIssues: Int? { get }
 }
 
 extension Volumes: ComicDisplayable {
-    // Explicitly pointing to your non-optional 'name' is fine here
-    // subtitle should be the database ID.
-    var subtitle: String { "ID: \(id)" }
+    var resourceType: String? { "volume" }
+    var issueNumber: String? { nil }
+    
+    // This creates the "1987 (175 issues)" label
+    var subtitle: String {
+        let year = startYear ?? "Unknown Year"
+        let count = countOfIssues ?? 0
+        return "\(year) (\(count) issues)"
+    }
 }
 
-extension VolumeIssues: ComicDisplayable {
-    var subtitle: String { "Issue #\(issueNumber)" }
+extension ComicIssues: ComicDisplayable {
+    // Issues don't have these, so we return nil to satisfy the protocol
+    var startYear: String? { nil }
+    var countOfIssues: Int? { nil }
+    
+    // This creates the "Issue #1" or "Issue #1/2" label
+    var subtitle: String {
+        return "Issue #\(issueNumber)"
+    }
 }
 
 enum ComicLayout {
@@ -35,10 +51,10 @@ struct ProductRow: View {
 
     var body: some View {
         if layout == .list {
-            // Your existing HStack logic
+            // Your existing HStack logic / Volumes
             standardHorizontalListLayout
         } else {
-            // The 2-column "Grid" logic
+            // The 2-column "Grid" logic / Issues
             verticalGridLayout
         }
     }
@@ -50,6 +66,8 @@ struct ProductRow: View {
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(item.name ?? "Unknown Title").font(.headline).lineLimit(2)
+//                Text(item.subtitle).font(.caption).foregroundColor(.secondary)
+                Text(item.resourceType ?? "Unknown Type").font(.caption).foregroundColor(.secondary)
                 Text(item.subtitle).font(.caption).foregroundColor(.secondary)
             }
             Spacer()
