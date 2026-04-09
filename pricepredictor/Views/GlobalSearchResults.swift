@@ -15,13 +15,14 @@ struct GlobalSearchResults: View {
     // In a simple search app, you don't strictly need to manage the task manually because .onSubmit creates a fresh one. However, if you were doing search-as-you-type,
     // Manage the task manually here ,if want to change the search implementation in future
     // @State private var task: Task<(), Never>?
-    
+
+
     // Define the 2-column layout
     let columns = [
         GridItem(.flexible(), spacing: 16),
         GridItem(.flexible(), spacing: 16)
     ]
-    
+
     // Header for Specific Issues (The Grid)
     private var issuesHeaderSection: some View {
         VStack(alignment: .leading, spacing: 4) {
@@ -63,14 +64,14 @@ struct GlobalSearchResults: View {
                         .padding(.horizontal)
                         .padding(.top, 8)
                 }
-                
+
                 // 2. Main Content Switcher
                 if viewModel.isLoading {
-                    ProgressView("Fetching collectibles...")
+                    ProgressView("Fetching comics...")
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else {
                     switch viewModel.resultMode {
-                        
+
                     case .issues:
                         if viewModel.issueVM.issues.isEmpty {
                             ContentUnavailableView("No Specific Issues Found", systemImage: "magnifyingglass")
@@ -78,7 +79,7 @@ struct GlobalSearchResults: View {
                             // needed to create a separate Vstack for each switch case view ,issues and volumes
                             VStack(spacing: 0) {
                                 issuesHeaderSection // ⬅️ Unique Issue Header
-                                
+
                                 ScrollView {
                                     LazyVGrid(columns: columns, spacing: 20) {
                                         ForEach(viewModel.issueVM.issues) { issue in
@@ -91,14 +92,14 @@ struct GlobalSearchResults: View {
                                 }
                             }
                         }
-                        
+
                     case .volumes:
                         if viewModel.products.isEmpty {
                             ContentUnavailableView("Perform a search", systemImage: "book.closed")
                         } else {
                             VStack(spacing: 0) {
                                 volumesHeaderSection // ⬅️ Unique Volume Header
-                                
+
                                 List(viewModel.products) { product in
                                     NavigationLink(value: product) {
                                         ProductRow(item: product)
@@ -115,50 +116,49 @@ struct GlobalSearchResults: View {
                 VolumeIssuesDetailView(volume: volume)
             }
             .navigationDestination(for: ComicIssues.self) { issue in
+                IssueDetailView(issue: issue)
                 // This is where you'd show the specific pricing/variant data
-//                IssueDetailView(issue: issue)
+                //                IssueDetailView(issue: issue)
             }
 
-                // In SwiftUI, the visual order of modifiers like .alert, .onSubmit, and .onChange doesn't strictly follow the "order of operations." Since they are all "listeners" waiting for different events, they can sit in any order.
-                .navigationTitle("Collectibles")
-                // binding
-                .searchable(text: $searchText,prompt: "Search by title")
-                // When it fires: Every time the user types or deletes a single letter.
-                // What it does: Checks if the bar is empty. If yes, it hides the old results.
-                .onChange(of: searchText) { oldValue, newValue in
-                    // Only clear if the user manually emptied the field
-                    if newValue.isEmpty && !viewModel.isLoading {
-                        viewModel.products = []
-                        viewModel.issueVM.issues = []
+            // In SwiftUI, the visual order of modifiers like .alert, .onSubmit, and .onChange doesn't strictly follow the "order of operations." Since they are all "listeners" waiting for different events, they can sit in any order.
+            .navigationTitle("Collectibles")
+            // binding
+            .searchable(text: $searchText,prompt: "Search by title")
+            // When it fires: Every time the user types or deletes a single letter.
+            // What it does: Checks if the bar is empty. If yes, it hides the old results.
+            .onChange(of: searchText) { oldValue, newValue in
+                // Only clear if the user manually emptied the field
+                if newValue.isEmpty && !viewModel.isLoading {
+                    viewModel.products = []
+                    viewModel.issueVM.issues = []
+                }
+            }
+            // Final action , user taps submit button
+            .onSubmit(of: .search) {
+                let cleanQuery = searchText.trimmingCharacters(in: .whitespaces)
+
+                if !cleanQuery.isEmpty {
+                    Task {
+                        // 🚀 Call the Smart Search instead of just loadData
+                        await viewModel.performSmartSearch(input: cleanQuery)
+
+                        // 🪄 Clear the bar and reset local state
+                        //                            searchText = ""
                     }
                 }
-                // Final action , user taps submit button
-                .onSubmit(of: .search) {
-                    let cleanQuery = searchText.trimmingCharacters(in: .whitespaces)
-                    
-                    if !cleanQuery.isEmpty {
-                        Task {
-                            // 🚀 Call the Smart Search instead of just loadData
-                            await viewModel.performSmartSearch(input: cleanQuery)
-                            
-                            // 🪄 Clear the bar and reset local state
-//                            searchText = ""
-                        }
-                    }
-                }
-                // .alert is a Presentation Modifier. When showAlert becomes true, SwiftUI ignores your layout stacks and tells the iOS System: "Dim the whole screen and pop this box over everything."
-                // Even if you moved the .alert code to the very top of your body or the very bottom, it would still look the same to the user. This is because .alert is a Presentation Modifier
-                .alert("Search Issue", isPresented: $viewModel.showAlert) {
-                    // The Safety Net (Catches the errors from the API)
-                    Button("OK", role: .cancel) { }
-                } message: {
-                    Text(viewModel.errorMessage ?? "An unknown error occurred.")
-                }
+            }
+            // .alert is a Presentation Modifier. When showAlert becomes true, SwiftUI ignores your layout stacks and tells the iOS System: "Dim the whole screen and pop this box over everything."
+            // Even if you moved the .alert code to the very top of your body or the very bottom, it would still look the same to the user. This is because .alert is a Presentation Modifier
+            .alert("Search Issue", isPresented: $viewModel.showAlert) {
+                // The Safety Net (Catches the errors from the API)
+                Button("OK", role: .cancel) { }
+            } message: {
+                Text(viewModel.errorMessage ?? "An unknown error occurred.")
             }
         }
     }
-
-
+}
 #Preview {
     GlobalSearchResults()
 }
