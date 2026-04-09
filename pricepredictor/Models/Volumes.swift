@@ -9,74 +9,112 @@
 // Volumes types requested
 // Volumeissues types requested
 
+import Foundation
 
+// 1. GENERIC WRAPPER (Stays generic for any T)
 struct ComicResponse<T: Codable>: Codable {
-    // parent container
     let offset: Int
     let numberOfTotalResults: Int
     let results: [T]
-
+    
     enum CodingKeys: String, CodingKey {
         case offset
-        // Map the API's snake_case to your Swift CamelCase
         case numberOfTotalResults = "number_of_total_results"
-        // results is the same key ,returns the entirety of the array of data
-        // it is considered top level, so need to call it here
-        // issue was that we could not make to separate instances of it , return list for Volumes and return list for VolumeIssues
-        // results [T] ,when data is availble we will provdie that type
         case results
     }
 }
 
-// these structs break down the initial call
-struct Volumes: Codable, Identifiable, Hashable {
-    // 1. Give 'id' a unique name for Swift logic, map it to "id" from API
+struct Volumes: Identifiable, Codable, Hashable {
     let id: Int
-    let name: String?
+    let startYear: String?
+    let countOfIssues: Int?
     let image: ImageLinks?
-    // Determine volume size, use for pagination logic
+    let name: String?
 
+    // Custom CodingKeys to match the API's snake_case
     enum CodingKeys: String, CodingKey {
-        case id
+        case id, image
+        case startYear = "start_year"
+        case countOfIssues = "count_of_issues"
         case name
-        case image
+    }
+
+    // ✅ Manually recreate the "Label" string
+    var displayLabel: String {
+        let year = startYear ?? "Unknown Year"
+        let count = countOfIssues ?? 0
+        return "Volume \(year) (\(count) issues)"
     }
 }
 
-struct VolumeIssues: Codable, Identifiable, Hashable {
-    // 1. Give 'id' a unique name for Swift logic, map it to "id" from API
+// 3. VOLUME ISSUES
+struct ComicIssues: Codable, Identifiable, Hashable {
     let id: Int
-    let issueNumber: String
+    let issueNumber: String // Keeping as non-optional if you're sure it exists
     let name: String?
     let image: ImageLinks?
     let storeDate: String?
+    let coverDate: String?
+    let volume: VolumeReference?
+    let resourceType: String?
+    let description: String?
+    let personCredits: [Person]?
+    let characterCredits: [Entity]?
+    let siteDetailUrl: String?        // 👈 Added for "View on ComicVine" button
 
     enum CodingKeys: String, CodingKey {
-        case id
-        case name
-        case image
+        case id, image, volume, description
+        case name // name same key for volumes and comic issues
         case issueNumber = "issue_number"
         case storeDate = "store_date"
+        case coverDate = "cover_date"
+        case resourceType = "resource_type"
+        case personCredits = "person_credits"
+        case characterCredits = "character_credits"
+        case siteDetailUrl = "site_detail_url"
     }
-        // Calculated property for sorting
-            var sortableNumber: Double {
-                // Simple logic to convert "1/2" to 0.5 for correct list ordering
-                if issueNumber == "1/2" { return 0.5 }
-                if issueNumber == "1/4" { return 0.25 }
-                // If the character isn't a digit, a decimal point, or a minus sign, throw it away
-                // Issue "100A": The filter sees the A, realizes it's not in the "allowed list" (0123456789.-), and deletes it. Result: "100".
-                let filtered = issueNumber.filter {"0123456789.-".contains($0)}
-                // Without that ?? 0.0, your app would crash or throw an error because it wouldn't know how to turn "nothing" into a number
-                return Double(filtered) ?? 0.0
+
+    // Found in the character_credits, team_credits, or location_credits arrays.
+    // Batman, Catwoman, The Riddler.
+    struct Entity: Codable, Hashable, Identifiable {
+        let id: Int
+        let name: String?
+    }
+
+    // Creators
+    struct Person: Codable, Hashable, Identifiable {
+        let id: Int
+        let name: String?
+        let role: String?
+    }
+
+    // ✅ The Modern Sieve Logic
+    var sortableNumber: Double {
+        if issueNumber == "1/2" { return 0.5 }
+        if issueNumber == "1/4" { return 0.25 }
+
+        let scanner = Scanner(string: issueNumber)
+        // Corrected for iOS 13+ modern API
+        return scanner.scanDouble() ?? 0.0
+    }
+
+    var sortingDate: String {
+        return storeDate ?? coverDate ?? "1900-01-01"
+    }
+
+    // Minimal struct to catch the volume name
+    struct VolumeReference: Codable, Hashable {
+        let name: String? // This will be "Absolute Batman"
     }
 }
 
+// 4. SHARED IMAGE LINKS
 struct ImageLinks: Codable, Hashable {
-    let smallURL: String
-    let screenURL: String
+    let smallURL: String?
+    let screenURL: String?
 
     enum CodingKeys: String, CodingKey {
         case smallURL = "small_url"
-        case screenURL = "screen_url" // Comic Vine uses 'screen_url' or 'medium_url'
+        case screenURL = "screen_url"
     }
 }
