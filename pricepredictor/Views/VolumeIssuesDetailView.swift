@@ -1,5 +1,5 @@
 //
-//  VolumeDetailView.swift
+//  VolumeIssuesDetailView.swift
 //  pricepredictor
 //
 //  Created by matthew chadwell on 3/16/26.
@@ -10,15 +10,16 @@ import SwiftUI
 struct VolumeIssuesDetailView: View {
     let volume: Volumes
     @State private var issueSearchText = ""
-    @State private var issues: [VolumeIssues] = [] // This would be fetched via your Service
+    @State private var issues: [ComicIssues] = [] // This would be fetched via your Service
     @State private var isLoading = false
+    @State private var viewModel = IssueViewModel()
 
     // THE SIEVE: Filters the 30 fetched issues locally by number or title
-    var filteredIssues: [VolumeIssues] {
+    var filteredIssues: [ComicIssues] {
         if issueSearchText.isEmpty {
-            return issues
+            return viewModel.issues
         } else {
-            return issues.filter { issue in
+            return viewModel.issues.filter { issue in
                 let matchName = (issue.name ?? "").localizedCaseInsensitiveContains(issueSearchText)
                 let matchNumber = issue.issueNumber.contains(issueSearchText)
                 return matchName || matchNumber
@@ -36,9 +37,10 @@ struct VolumeIssuesDetailView: View {
         ScrollView {
             VStack(alignment: .leading) {
                 // Header showing volume info
-                headerSection
+                issuesHeaderSection
                 
-                if isLoading {
+                // ✅ USE THE VIEWMODEL'S LOADING STATE
+                if viewModel.isLoading {
                     ProgressView("Fetching Issues...")
                         .frame(maxWidth: .infinity, minHeight: 200)
                 } else {
@@ -46,7 +48,9 @@ struct VolumeIssuesDetailView: View {
                     LazyVGrid(columns: columns, spacing: 20) {
                         ForEach(filteredIssues) { issue in
                             // Reuse the ProductRow with the .grid layout flag
-                            ProductRow(item: issue, layout: .grid)
+                            NavigationLink(destination: IssueDetailView(issue: issue)){
+                                ProductRow(item: issue, layout: .grid)
+                            }
                         }
                     }
                     .padding(.horizontal)
@@ -55,26 +59,34 @@ struct VolumeIssuesDetailView: View {
         }
         .navigationTitle(volume.name ?? "Issues")
         .navigationBarTitleDisplayMode(.inline)
-        .searchable(text: $issueSearchText, prompt: "Sieve issues...")
-        .onAppear {
-            // Trigger your API call here for the specific volume ID
-            loadIssues()
+        .searchable(text: $issueSearchText, prompt: "Search issues...")
+        .task {
+            if viewModel.issues.isEmpty {
+                await viewModel.loadEntireVolume(for: volume.id)
+            }
+        }
+        .refreshable {
+            // 🔄 This ignores the 'isEmpty' check and forces a network call
+            await viewModel.loadEntireVolume(for: volume.id)
         }
     }
     
-    private var headerSection: some View {
+    private var issuesHeaderSection: some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(volume.name ?? "Unknown Series")
                 .font(.title2.bold())
-            Text("\(volume.countOfIssues ?? 0) Total Issues")
+            Text("\(viewModel.totalResultCount) Total Issues")
                 .font(.subheadline)
                 .foregroundColor(.secondary)
+            //prevents confudion for volumes starting on a differnt comic # in a volume other than #1
+            if let firstIssue = viewModel.issues.first?.issueNumber {
+                Text("Starts at #\(firstIssue)")
+            }
         }
         .padding()
     }
-
-    func loadIssues() {
-        // Placeholder for your Service call:
-        // await service.fetchIssues(for: volume.id)
+    
+    func loadIssues() async {
+        await viewModel.loadEntireVolume(for: volume.id)
     }
 }
