@@ -82,13 +82,19 @@ class ProductService {
     }
 
     enum Secrets {
+        /// Comic Vine key from the app Info.plist (xcconfig at build time), or `COMIC_VINE_API_KEY` in the environment (schemes, previews, CI).
         static var apiKey: String {
-            // This looks into the Info.plist, which was populated in the .xcconfig
-            guard let key = Bundle.main.object(forInfoDictionaryKey: "COMIC_VINE_API_KEY") as? String else {
-                // We use fatalError here because if the key is missing, the app cannot function.
-                fatalError("API_KEY not found in Info.plist / xcconfig")
+            let plistKey = Bundle.main.object(forInfoDictionaryKey: "COMIC_VINE_API_KEY") as? String
+            let envKey = ProcessInfo.processInfo.environment["COMIC_VINE_API_KEY"]
+            for candidate in [plistKey, envKey] {
+                if let raw = candidate?.trimmingCharacters(in: .whitespacesAndNewlines), !raw.isEmpty {
+                    return raw
+                }
             }
-            return key
+            fatalError(
+                "COMIC_VINE_API_KEY is missing or empty. Add project-root Secrets.xcconfig (copy Secrets.example.xcconfig), " +
+                "or set COMIC_VINE_API_KEY in the Run scheme’s Environment Variables. SwiftUI Previews use a different bundle, so the env var is required there."
+            )
         }
     }
 }

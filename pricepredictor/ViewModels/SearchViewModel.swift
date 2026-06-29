@@ -106,11 +106,3 @@ class SearchViewModel {
         }
     }
 }
-extension String {
-    var condensed: String {
-        // Removes dashes, spaces, and punctuation: "Spider-Man" -> "spiderman"
-        self.lowercased()
-            .components(separatedBy: CharacterSet.alphanumerics.inverted)
-            .joined()
-    }
-}

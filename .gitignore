@@ -1,1 +1,3 @@
+# Local API keys (copy from Secrets.example.xcconfig)
 Secrets.xcconfig
+.derivedData/

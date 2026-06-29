@@ -23,6 +23,15 @@ struct GlobalSearchResults: View {
         GridItem(.flexible(), spacing: 16)
     ]
 
+    /// Solid header fill on iOS; `Color.clear` elsewhere so macOS SourceKit does not require UIKit.
+    private var headerSurfaceBackground: Color {
+        #if os(iOS)
+        Color(UIColor.systemBackground)
+        #else
+        Color.clear
+        #endif
+    }
+
     // Header for Specific Issues (The Grid)
     private var issuesHeaderSection: some View {
         VStack(alignment: .leading, spacing: 4) {
@@ -35,7 +44,7 @@ struct GlobalSearchResults: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
-        .background(Color(UIColor.systemBackground)) // Keeps header solid during scroll
+        .background(headerSurfaceBackground) // Keeps header solid during scroll
     }
 
     // Header for Volumes (The List)
@@ -49,7 +58,7 @@ struct GlobalSearchResults: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
-        .background(Color(UIColor.systemBackground))
+        .background(headerSurfaceBackground)
     }
 
     var body: some View {

@@ -1,0 +1,5 @@
+// Base app configuration. Local API keys live in Secrets.xcconfig (gitignored).
+#include? "../Secrets.xcconfig"
+
+// Ensure the key is merged into the generated Info.plist (same config layer as COMIC_VINE_API_KEY).
+INFOPLIST_KEY_COMIC_VINE_API_KEY = $(COMIC_VINE_API_KEY)

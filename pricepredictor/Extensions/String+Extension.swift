@@ -11,14 +11,19 @@ extension String {
             .lowercased()
     }
 
-    /// Splits a string into a title and an issue number.
-    /// Returns: (title: "batman", issue: "423")
+    /// Removes dashes, spaces, and punctuation: "Spider-Man" -> "spiderman"
+    var condensed: String {
+        self.lowercased()
+            .components(separatedBy: CharacterSet.alphanumerics.inverted)
+            .joined()
+    }
+
+    /// Splits a string into a title and an issue number after sanitizing.
+    /// Returns: (title: "batman", issueNumber: "423")
     func partitionTitleAndIssue() -> (title: String, issueNumber: String?) {
-        // 1. Sanitize the string first to ensure we have clean "signal"
         let clean = self.sanitized
 
-        // 2. Regex to find the first sequence of digits
-        let pattern = #"(\d+(\.\d+)?)"# // Supports "1" and "12.1"
+        let pattern = #"(\d+(\.\d+)?)"#
 
         guard let regex = try? NSRegularExpression(pattern: pattern),
               let match = regex.firstMatch(in: clean, range: NSRange(clean.startIndex..., in: clean)) else {
@@ -28,11 +33,10 @@ extension String {
         let matchRange = Range(match.range(at: 0), in: clean)!
         let foundNumber = String(clean[matchRange])
 
-        // 3. Title is everything except that number
         let titlePart = clean.replacingCharacters(in: matchRange, with: "")
-                             .trimmingCharacters(in: .whitespaces)
-                             .replacingOccurrences(of: "  ", with: " ")
-        print(titlePart)
+            .trimmingCharacters(in: .whitespaces)
+            .replacingOccurrences(of: "  ", with: " ")
+
         return (titlePart, foundNumber)
     }
 }
