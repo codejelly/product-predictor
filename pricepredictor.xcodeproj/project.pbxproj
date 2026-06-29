@@ -27,6 +27,8 @@
 		B0A8FB3B2F450DE0000A3482 /* pricepredictor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = pricepredictor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0A8FB482F450DE1000A3482 /* pricepredictorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = pricepredictorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0A8FB522F450DE1000A3482 /* pricepredictorUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = pricepredictorUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B0A8FB672F450DE1000A3482 /* App.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = App.xcconfig; sourceTree = "<group>"; };
+		B0A8FB682F450DE1000A3482 /* Secrets.example.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.example.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -75,11 +77,21 @@
 		B0A8FB322F450DE0000A3482 = {
 			isa = PBXGroup;
 			children = (
+				B0A8FB692F450DE1000A3482 /* Config */,
+				B0A8FB682F450DE1000A3482 /* Secrets.example.xcconfig */,
 				B0A8FB3D2F450DE0000A3482 /* pricepredictor */,
 				B0A8FB4B2F450DE1000A3482 /* pricepredictorTests */,
 				B0A8FB552F450DE1000A3482 /* pricepredictorUITests */,
 				B0A8FB3C2F450DE0000A3482 /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		B0A8FB692F450DE1000A3482 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				B0A8FB672F450DE1000A3482 /* App.xcconfig */,
+			);
+			path = Config;
 			sourceTree = "<group>";
 		};
 		B0A8FB3C2F450DE0000A3482 /* Products */ = {
@@ -390,6 +402,7 @@
 		};
 		B0A8FB5D2F450DE1000A3482 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B0A8FB672F450DE1000A3482 /* App.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -421,6 +434,7 @@
 		};
 		B0A8FB5E2F450DE1000A3482 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B0A8FB672F450DE1000A3482 /* App.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
